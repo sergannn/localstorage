@@ -1,0 +1,141 @@
+<create-issue>
+    <div class="container-fluid py-5" id="middlePart">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 my-3">
+                            <h2 class="col-md-8" id="middlePartTitle">Create Issue</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <select class="form-control" id="exampleFormControlSelect1" onchange={ priorityChange }>
+                                        <option value="" selected>Select Priority</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group date">
+                                    <input id="datepicker" data-provide="datepicker" class="form-control" onChange={ dateChange }>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="New Issue" aria-label="Recipient's username" aria-describedby="button-addon2" onkeyup={ issueNameChange }>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary middlePartButton" type="button" onclick={ onClick }>Create Issue</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>    
+ <div class="container-fluid py-5">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 my-3">
+                            <h2 class="col-md-8 title">Your issues</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                <div each={ project in projects }> <h6 class="text-muted">  Project {project.name}:</h6>
+                <h6 if={project.issues.length==0}>No issues</h6>
+                <div if={project.issues.length} each={issue in project.issues} class="row">
+                <div class="col-md-6">
+                <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="">
+                <label class="form-check-label" for="defaultCheck1">
+                                 {issue.title}
+                                </label>
+                                </div>
+                                </div>
+                                <div class="col-md-3">
+                                <span>{issue.date}</span>
+                                <button issue="{issue.title}" id="{project.name}" onclick={ deleteI } class="iconButton">
+                                <i class="fa fa-trash-o"></i></button>
+                                </div>
+                                </div>
+                    </div>
+                    </div>
+                   
+                   
+                   
+                   
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+ 
+        $('.input-group.date input').datepicker()
+        
+        export default {
+            onBeforeMount() {
+                this.projects = issueTracker.projects
+            },
+            onMounted() {
+                 this.projects = issueTracker.projects
+             
+                this.state.priority = ''
+                this.state.date = ''
+                this.state.text = ''
+                
+                $('.input-group.date input').datepicker({
+                    maxViewMode: 2,
+                    autoclose: true
+                });
+            },
+
+            priorityChange(e) {
+                this.update({
+                    priority: e.srcElement.selectedIndex
+                })
+            },
+            deleteI(e)
+            {
+                e.preventDefault();
+                console.log(e.target.attributes);
+                issueTracker.deleteIssueFromProject(
+                e.target.attributes.id.value,
+                e.target.attributes.issue.value)
+                this.update();
+            },
+            issueNameChange(e) {
+                this.update({
+                    text: e.target.value
+                })
+            },
+
+            onClick(e) {
+                e.preventDefault();
+                   console.log("start adding issue")    
+                if(this.state.priority && this.state.text) {
+                    console.log(this.state.text, $('.input-group.date input').datepicker('getDate'), this.state.priority, false)
+                    issueTracker.addIssueToProject(this.state.text, $('.input-group.date input').datepicker('getDate'), this.state.priority, false)
+
+                 this.update()
+                }
+            }
+            
+        }
+    </script>
+</create-issue>
