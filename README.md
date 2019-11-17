@@ -2,7 +2,9 @@
 js splice - удаляет из массива элемент ( например issue) 
 у кнопки button я сделал onclick - 
   чтобы передать проект у которого надо удалить issue и название issue,
-  я добавил ей два атрибута   <button issue="{issue.title}" id="{project.name}"
+  я добавил ей два атрибута   
+  
+  <button issue="{issue.title}" id="{project.name}" onclick={ deleteI }></button>
 
 Это позволяет сделать так
  e это событие
