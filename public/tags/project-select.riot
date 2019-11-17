@@ -1,0 +1,65 @@
+<project-select>
+<div class="container-fluid py-5">
+        <div class="col-md-8 mx-auto">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 my-3">
+                        <h2 class="col-md-8 title">Create new Project</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="container h-100">
+                <form>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="New Project" aria-label="Recipient's username" aria-describedby="button-addon2" onkeyup={ edit }>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" onclick={ onClick }>Create Project</button>
+                        </div>
+                    </div>
+                </form>
+                <h6 class="text-muted">Your projects</h6>
+                <div class="list-group">
+                    <button class="list-group-item list-group-item-action" each={ project in projects } onclick={ onSelectProject }>{ project.name }</button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <script>
+        export default {
+            onBeforeMount() {
+                this.projects = issueTracker.projects
+             //   el.trigger('start', "yey")
+             //   this.state.text = ''
+            },
+
+            onClick(e) {
+                e.preventDefault()
+                console.log(this);
+                if(this.state.text) {
+                 
+                   issueTracker.addProject(this.state.text) 
+                  this.state.text = 'newtext'
+                  
+                   this.update()
+                }
+            },
+
+            edit(e) {
+                this.update({
+                   text: e.target.value
+                })
+            },
+
+            onSelectProject(e) {
+                let projectName = e.toElement.textContent
+                el.trigger('selectProject', projectName)
+            },
+
+            onUpdated(e) {
+                console.log('update');
+                localStorage.setItem("IssueTracker_Projects", JSON.stringify(issueTracker.projects))
+            }
+        }
+    </script>
+</project-select>
